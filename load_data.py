@@ -27,7 +27,7 @@ class PACSDatasetBaseline(Dataset):
 
 def read_lines(data_path, domain_name):
     examples = {}
-    with open(f'{data_path}/{domain_name}.txt') as f:
+    with open(f'./AML-Proj1-Vision-Language/{data_path}/{domain_name}.txt') as f:
         lines = f.readlines()
 
     for line in lines: 
