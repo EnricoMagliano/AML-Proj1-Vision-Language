@@ -31,11 +31,12 @@ def read_lines(data_path, domain_name):
         lines = f.readlines()
 
     for line in lines: 
+        
         line = line.strip().split()[0].split('/')
         category_name = line[3]
         category_idx = CATEGORIES[category_name]
         image_name = line[4]
-        image_path = f'{data_path}/kfold/{domain_name}/{category_name}/{image_name}'
+        image_path = f'./AML-Proj1-Vision-Language/{data_path}/kfold/{domain_name}/{category_name}/{image_name}'
         if category_idx not in examples.keys():
             examples[category_idx] = [image_path]
         else:
