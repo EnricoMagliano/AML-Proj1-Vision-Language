@@ -16,7 +16,7 @@ class DomainDisentangleExperiment: # See point 2. of the project
 
         # Setup optimization procedure
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=opt['lr'])
-        self.criterion_2 = torch.nn.MSELoss()
+        self.criterion = torch.nn.MSELoss()
 
 
     def save_checkpoint(self, path, iteration, best_accuracy, total_train_loss):
