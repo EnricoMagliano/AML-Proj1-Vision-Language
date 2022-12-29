@@ -60,7 +60,7 @@ class DomainDisentangleModel(nn.Module):
             nn.Linear(512, 512),                    
             nn.BatchNorm1d(512),
             nn.ReLU(),
-
+ 
             nn.Linear(512, 512),
             nn.BatchNorm1d(512),
             nn.ReLU(),
