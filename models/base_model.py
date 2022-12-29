@@ -70,8 +70,7 @@ class DomainDisentangleModel(nn.Module):
             nn.ReLU(),
 
             nn.Linear(512, 256),
-            nn.BatchNorm1d(256),
-            nn.ReLU()
+            
         )
 
         self.category_encoder = nn.Sequential(         #reduce by an half
@@ -88,30 +87,32 @@ class DomainDisentangleModel(nn.Module):
             nn.ReLU(),
 
             nn.Linear(512, 256),
-            nn.BatchNorm1d(256),
-            nn.ReLU()
+            
         )
 
         self.domain_classifier = nn.Linear(256, 2)
         self.category_classifier = nn.Linear(256, 7)
 
         self.reconstructor = nn.Sequential(
-            nn.ReLU(),
-            nn.BatchNorm1d(512),
-            nn.Linear(512, 512),
-
-            nn.ReLU(),
-            nn.BatchNorm1d(512),
-            nn.Linear(512, 512),
-
-            nn.ReLU(),
-            nn.BatchNorm1d(256),
+            
             nn.Linear(256, 512),
+
+            nn.ReLU(),
+            nn.BatchNorm1d(512),
+            nn.Linear(512, 512),
+
+            nn.ReLU(),
+            nn.BatchNorm1d(512),
+            nn.Linear(512, 512),
+
+            nn.ReLU(),
+            nn.BatchNorm1d(512),
+            nn.Linear(512, 512),
         )
 
     def forward(self, x):
         f = self.feature_extractor(x)
         fc = self.category_encoder(f)
         fd = self.domain_encoder(f)
-        yc = self
-        return x
+        y = self.reconstructor(torch.cat((fd, fc), 1))
+        return y, f
