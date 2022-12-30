@@ -105,7 +105,8 @@ class DomainDisentangleModel(nn.Module):
 
             nn.ReLU(),
             nn.BatchNorm1d(512),
-            nn.Linear(512, 512),
+            nn.Linear(512, 512)
+            #maybe it need a nn.ReLU or Sigmoind at the end
         )
 
     def forward(self, x):
