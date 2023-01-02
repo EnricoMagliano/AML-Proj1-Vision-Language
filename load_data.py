@@ -17,10 +17,10 @@ class PACSDatasetBaseline(Dataset):
         self.examples = examples
         self.transform = transform
 
-    def __len__(self):
+    def __len__(self):      #for call len(dataset)    
         return len(self.examples)
     
-    def __getitem__(self, index):
+    def __getitem__(self, index):   #for indexing dataset[i]
         img_path, y = self.examples[index]
         x = self.transform(Image.open(img_path).convert('RGB'))
         return x, y
