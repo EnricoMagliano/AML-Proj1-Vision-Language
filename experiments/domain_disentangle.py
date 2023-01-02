@@ -44,7 +44,7 @@ class DomainDisentangleExperiment: # See point 2. of the project
         return iteration, best_accuracy, total_train_loss
 
     def train_iteration(self, data):
-        x, y = data
+        x, y = data     #a batch of x and y, not a single sample
         x = x.to(self.device)
         y = y.to(self.device)
 

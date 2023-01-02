@@ -42,10 +42,10 @@ def main(opt):
         #training loop    
         if opt['experiment'] == 'baseline':
             
-            while iteration < opt['max_iterations']:
-                for data in train_loader:
+            while iteration < opt['max_iterations']:    #loop over epochs
+                for data in train_loader:   #loop over iterations
 
-                    total_train_loss += experiment.train_iteration(data)
+                    total_train_loss += experiment.train_iteration(data)    #forward, backward and update
 
                     if iteration % opt['print_every'] == 0:
                         logging.info(f'[TRAIN - {iteration}] Loss: {total_train_loss / (iteration + 1)}')
