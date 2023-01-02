@@ -43,7 +43,7 @@ class BaselineModel(nn.Module):
     
     def forward(self, x):
         x = self.feature_extractor(x)
-        print(torch.min(x), torch.max(x))
+        #print(torch.min(x), torch.max(x))
         x = self.category_encoder(x)
         x = self.classifier(x)
         return x
