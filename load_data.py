@@ -52,8 +52,10 @@ def build_splits_baseline(opt):
 
     # Compute ratios of examples for each category
     source_category_ratios = {category_idx: len(examples_list) for category_idx, examples_list in source_examples.items()}
+    print(source_category_ratios)
     source_total_examples = sum(source_category_ratios.values())
     source_category_ratios = {category_idx: c / source_total_examples for category_idx, c in source_category_ratios.items()}
+    print(source_total_examples)
 
     # Build splits - we train only on the source domain (Art Painting)
     val_split_length = source_total_examples * 0.2 # 20% of the training split used for validation

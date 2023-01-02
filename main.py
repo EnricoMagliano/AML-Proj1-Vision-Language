@@ -44,7 +44,6 @@ def main(opt):
             
             while iteration < opt['max_iterations']:    #loop over epochs
                 for data in train_loader:   #loop over iterations
-
                     total_train_loss += experiment.train_iteration(data)    #forward, backward and update
 
                     if iteration % opt['print_every'] == 0:
@@ -66,8 +65,9 @@ def main(opt):
 
         elif opt['experiment'] == 'domain_disentangle':
              while iteration < opt['max_iterations']:
-                for data in train_loader:
-
+                step_1 = True
+                for data in train_loader:   #tupla of array of 32 images features and array of 32 labels
+                    
                     total_train_loss += experiment.train_iteration(data)
 
                     if iteration % opt['print_every'] == 0:
@@ -75,7 +75,7 @@ def main(opt):
                         print(f'[TRAIN - {iteration}] Loss: {total_train_loss / (iteration + 1)}')
                     
     
-
+                    step_1 != step_1
                     iteration += 1
                     if iteration > opt['max_iterations']:
                         break

@@ -62,7 +62,7 @@ class BaselineExperiment: # See point 1. of the project
         accuracy = 0
         count = 0
         loss = 0
-        with torch.no_grad():
+        with torch.no_grad(): #not compute grad
             for x, y in loader:
                 x = x.to(self.device)
                 y = y.to(self.device)
