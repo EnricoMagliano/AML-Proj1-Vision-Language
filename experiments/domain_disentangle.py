@@ -16,9 +16,9 @@ class DomainDisentangleExperiment: # See point 2. of the project
 
         # Setup optimization procedure
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=opt['lr'])
-        self.criterion = torch.nn.MSELoss()
-
-
+        self.loss_rec = torch.nn.MSELoss()
+        self.loss_class_ce = torch.nn.CrossEntropyLoss()
+        self.loss_domain_ce = torch.nn.CrossEntropyLoss()
     def save_checkpoint(self, path, iteration, best_accuracy, total_train_loss):
         checkpoint = {}
 
@@ -45,18 +45,36 @@ class DomainDisentangleExperiment: # See point 2. of the project
 
     def train_iteration(self, data):
         x, y = data     #a batch of x and y, not a single sample
-        print(y)
         x = x.to(self.device)
         y = y.to(self.device)
+        y_d = torch.tensor([])
+        y_source = torch.tensor([])
+        
 
-        logits = self.model(x)
-        loss = self.criterion(logits[1], logits[0])
+        for yi in y:
+            if yi < 7:
+                y_d.add(0)
+                y_source.add(yi)
+                
+            else:
+                y_d.add(1)
+        print(len(y))
+        print(len(y_d))
+        print("y source: ", y_source)
+        print("len ", len(y_source))
 
+        logits = self.model(x, y)
+        print(logits[1])
+        loss_class_ce = self.loss_class_ce(logits[1], y_source)
+        loss_domain_ce = self.loss_domain_ce(logits[2], y_d)
+        loss_rec = self.loss_rec(logits[1], logits[3])
         self.optimizer.zero_grad()
-        loss.backward()
+        loss_class_ce.backward()
+        loss_domain_ce.backward()
+        loss_rec.backward()
         self.optimizer.step()
 
-        return loss.item()
+        return loss_class_ce.item()
 
     def validate(self, loader):
         self.model.eval()

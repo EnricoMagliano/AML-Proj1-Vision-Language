@@ -109,9 +109,20 @@ class DomainDisentangleModel(nn.Module):
             #maybe it need a nn.ReLU or Sigmoind at the end
         )
 
-    def forward(self, x):
+    def forward(self, x, y): #x = batch y = labels of the batch
         f = self.feature_extractor(x)
-        fc = self.category_encoder(f)
         fd = self.domain_encoder(f)
-        y = self.reconstructor(torch.cat((fd, fc), 1))
-        return y, f
+        fc = self.category_encoder(f)
+        
+        fc_source = torch.empty(256)
+
+        for (fi, yi) in zip(fc,y):
+            if yi < 7:
+                fc_source.add(fi)
+
+        
+        print("fc ",len(fc_source))
+        rec = self.reconstructor(torch.cat((fd, fc), 1))
+        yc = self.category_classifier(fc_source)
+        yd = self.domain_classifier(fd)
+        return rec, yc, yd, f

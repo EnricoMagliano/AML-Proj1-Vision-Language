@@ -49,6 +49,8 @@ class BaselineExperiment: # See point 1. of the project
         y = y.to(self.device)
 
         logits = self.model(x)
+        print("log ", logits)
+        print("y ", y)
         loss = self.criterion(logits, y)
 
         self.optimizer.zero_grad()
