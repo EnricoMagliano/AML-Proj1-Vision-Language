@@ -52,10 +52,9 @@ def build_splits_baseline(opt):
 
     # Compute ratios of examples for each category
     source_category_ratios = {category_idx: len(examples_list) for category_idx, examples_list in source_examples.items()}
-    print(source_category_ratios)
+    
     source_total_examples = sum(source_category_ratios.values())
     source_category_ratios = {category_idx: c / source_total_examples for category_idx, c in source_category_ratios.items()}
-    print(source_total_examples)
 
     # Build splits - we train only on the source domain (Art Painting)
     val_split_length = source_total_examples * 0.2 # 20% of the training split used for validation
@@ -112,7 +111,7 @@ def build_splits_domain_disentangle(opt):
     source_category_ratios = {category_idx: len(examples_list) for category_idx, examples_list in source_examples.items()}
     source_total_examples = sum(source_category_ratios.values())
     source_category_ratios = {category_idx: c / source_total_examples for category_idx, c in source_category_ratios.items()}
-
+    
     # Build splits - we train only on the source domain (Art Painting)
     val_split_length = source_total_examples * 0.2 # 20% of the training split used for validation
 
@@ -132,6 +131,12 @@ def build_splits_domain_disentangle(opt):
         for example in examples_list:
             test_examples.append([example, category_idx]) # each pair is [path_to_img, class_label]
     
+    test_examples_aus = []
+    for (ex, cat) in test_examples:
+        test_examples_aus.append([ex, cat+7])   #add 7 to embed the domain type information
+   
+    train_examples = train_examples + test_examples_aus
+
     # Transforms
     normalize = T.Normalize([0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]) # ResNet18 - ImageNet Normalization
 
@@ -151,9 +156,9 @@ def build_splits_domain_disentangle(opt):
     ])
 
     # Dataloaders
-    train_loader = DataLoader(PACSDatasetBaseline(train_examples, train_transform), batch_size=opt['batch_size'], num_workers=opt['num_workers'], shuffle=True)
-    val_loader = DataLoader(PACSDatasetBaseline(val_examples, eval_transform), batch_size=opt['batch_size'], num_workers=opt['num_workers'], shuffle=False)
-    test_loader = DataLoader(PACSDatasetBaseline(test_examples, eval_transform), batch_size=opt['batch_size'], num_workers=opt['num_workers'], shuffle=False)
+    train_loader = DataLoader(PACSDatasetBaseline(train_examples, train_transform), batch_size=opt['batch_size'], num_workers=opt['num_workers'], shuffle=True) #source + target
+    val_loader = DataLoader(PACSDatasetBaseline(val_examples, eval_transform), batch_size=opt['batch_size'], num_workers=opt['num_workers'], shuffle=False) #only source
+    test_loader = DataLoader(PACSDatasetBaseline(test_examples, eval_transform), batch_size=opt['batch_size'], num_workers=opt['num_workers'], shuffle=False) #only target pair w
 
     return train_loader, val_loader, test_loader
 
